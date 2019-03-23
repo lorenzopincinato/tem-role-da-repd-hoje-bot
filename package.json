@@ -1,0 +1,8 @@
+{
+  "name": "tem-role-da-repd-hoje-bot",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:lorenzopincinato/tem-role-da-repd-hoje-bot.git",
+  "author": "Lorenzo Pincinato <lorenzopincinato@gmail.com>",
+  "license": "MIT"
+}
