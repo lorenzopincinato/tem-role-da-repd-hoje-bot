@@ -1,6 +1,6 @@
-import { createHmac } from 'crypto';
+const crypto = require('crypto');
 
-export function handleComentOnIssue(req, res) {
+exports.handleCommentOnIssue = (req, res) => {
     if (req.body.action !== 'created') {
         res.end();
         return;
@@ -10,16 +10,16 @@ export function handleComentOnIssue(req, res) {
     console.log(`New comment on issue: ${comment.body}`);
 
     return validateRequest(req);
-}
+};
 
 function validateRequest (req) {
-    return Promisse.resolve()
+    return Promise.resolve()
         .then(() => {
-            const digest = createHmac('sha1', process.env.SCRET_TOKEN)
+            const digest = crypto.createHmac('sha1', process.env.SECRET_TOKEN)
                 .update(JSON.stringify(req.body))
                 .digest('hex');
-
-            if (req.headers['x-github-signature'] !== `sha1=${digest}`) {
+                
+            if (req.headers['x-hub-signature'] !== `sha1=${digest}`) {
                 const error = new Error('Unauthorized');
                 error.statusCode = 403;
                 throw error;
