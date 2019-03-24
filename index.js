@@ -6,11 +6,16 @@ exports.handleCommentOnIssue = (req, res) => {
         return;
     }
 
+    if (!req.body.comment.body.includes(`@${process.env.ACCOUNT_ID}`)) {
+        res.end();
+        return;
+    }
+
     const comment = req.body.comment;
+
     console.log(`New comment on issue: ${comment.body}`);
 
-    return validateRequest(req)
-        .then(() => validateBotCall(comment.body));
+    return validateRequest(req);
 };
 
 function validateRequest (req) {
@@ -26,19 +31,6 @@ function validateRequest (req) {
                 throw error;
             } else {
                 console.log('Request validated.');
-            }
-        })
-}
-
-function validateBotCall (commentBody) {
-    return Promise.resolve()
-        .then(() => {
-            if (!commentBody.includes(`@${process.env.ACCOUNT_ID}`)) {
-                const error = new Error('Bad Request');
-                error.statusCode = 400;
-                throw error;
-            } else {
-                console.log('Bot call validated.');
             }
         })
 }
