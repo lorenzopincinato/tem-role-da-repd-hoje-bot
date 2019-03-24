@@ -15,7 +15,8 @@ exports.handleCommentOnIssue = (req, res) => {
 
     console.log(`New comment on issue: ${comment.body}`);
 
-    return validateRequest(req);
+    return validateRequest(req)
+        .then(() => parseEvent(comment.body));
 };
 
 function validateRequest (req) {
@@ -32,5 +33,22 @@ function validateRequest (req) {
             } else {
                 console.log('Request validated.');
             }
+        })
+}
+
+function parseEvent (commentBody) {
+    return Promise.resolve()
+        .then(() => {
+            commentBody = commentBody.replace(`@${process.env.ACCOUNT_ID}\r\n`, "");
+            let values = commentBody.split("; ");
+
+            let event = {
+                name: values[0],
+                startsAt: values[1],
+                date: values[2],
+                link: values[3]
+            };
+
+            console.log(`Event parsed: { name: ${event.name}, startsAt: ${event.startsAt}, date: ${event.date}, link: ${event.link} }`);
         })
 }
